@@ -9,12 +9,20 @@ class Black_Jack():
         print('Welcome to Black Jack!')
         self.player = Player(1000)
         print('Your initial bankroll is: ' + self.player.balance)
+        self.bet()
+        self.dealer = Dealer()
+        self.init_game()
+
+    def bet(self):
         while True:
             self.player.curr_bet = input('Please input your first bet : ')
             if self.player.withdraw(self.player.curr_bet):
                 break
         print('Your current bet: ' + self.player.curr_bet)
-        self.dealer = Dealer()
+
+    def init_game(self, reset=False):
+        if reset:
+            self.dealer.__init__()
         self.hit('player')
         self.hit('player')
         self.hit('dealer')

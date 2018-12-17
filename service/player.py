@@ -2,6 +2,7 @@ from service import common_util
 
 
 class Player():
+
     def __init__(self, balance=0):
         self.balance = 0
         self.curr_bet = 0
@@ -27,3 +28,8 @@ class Player():
         else:
             print('Incorrect money number!')
             return False
+
+    def reset(self):
+        self.curr_bet = 0
+        self.hand_cards = []
+        self.sum_point = 0
