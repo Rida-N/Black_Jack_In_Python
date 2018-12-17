@@ -1,3 +1,6 @@
+from service import common_util
+
+
 class Bank_Account():
     def __init__(self, balance=0):
         self.balance = 0
@@ -10,6 +13,8 @@ class Bank_Account():
             return False
 
     def withdraw(self, money):
+        if not common_util.check_int(money):
+            return False
         if int(money) and money > 0:
             self.balance = self.balance - money
             if self.balance < 0:
