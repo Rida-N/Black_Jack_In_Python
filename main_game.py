@@ -8,7 +8,7 @@ class Black_Jack():
     def __init__(self):
         print('Welcome to Black Jack!')
         self.player = Player(1000)
-        print('Your initial bankroll is: ' + self.player.get_balance())
+        print('Your initial bankroll is: ' + str(self.player.get_balance()))
         self.dealer = Dealer()
         self.turn = 'player'
         self.init_game()
@@ -17,7 +17,7 @@ class Black_Jack():
         while True:
             if self.player.withdraw(input('Please input your first bet : ')):
                 break
-        print('Your current bet: ' + self.player.curr_bet)
+        print('Your current bet: ' + str(self.player.curr_bet))
 
     def init_game(self, reset=False):
         self.bet()
@@ -26,16 +26,17 @@ class Black_Jack():
             self.player.reset()
         self.hit(self.turn, onetime=True)
         self.hit(self.turn, onetime=True)
-        self.turn='dealer'
+        self.turn = 'dealer'
         self.hit(self.turn, onetime=True)
         self.hit(self.turn, onetime=True, hide=True)
         self.print_cards(first=True)
-        self.turn='player'
+        self.turn = 'player'
         self.gambling()
 
     def print_cards(self, first=False):
         print('Your card : ' + Fore.RED + str(self.player.hand_cards) + Style.RESET_ALL)
         print("Dealer's card : " + Fore.BLUE + str((['*'] + self.dealer.hand_cards[1:]) if first else self.dealer.hand_cards))
+        print(Style.RESET_ALL)
 
     def gambling(self):
         while not self.game_over():
@@ -46,8 +47,8 @@ class Black_Jack():
                 self.hit('player', onetime=True)
 
     def make_option(self):
-        print("What's your choice ?")
-        print(Fore.RED + "1. STAND" + Fore.BLUE + "2. HIT")
+        print(Fore.GREEN + "What's your choice ?")
+        print(Fore.BLUE + "1. STAND " + Fore.RED + "2. HIT")
         print(Style.RESET_ALL)
         while True:
             self.player_choice = input('Please input your choice (1 or 2): ')
@@ -73,7 +74,7 @@ class Black_Jack():
     def game_over(self):
         if self.dealer.sum_point > 21:
             print('You Win! Dealer is busted!')
-            self.player.deposite(self.player.curr_bet*2)
+            self.player.deposite(self.player.curr_bet * 2)
             self.check_replay()
             return True
         elif self.player.sum_point > 21:
@@ -84,11 +85,11 @@ class Black_Jack():
             if self.dealer.sum_point == 21:
                 print('This is a TIE! Game Over!')
             else:
-                self.player.deposite(self.player.curr_bet+self.player.curr_bet/2*3)
+                self.player.deposite(self.player.curr_bet + self.player.curr_bet / 2 * 3)
                 print("You Win! It's a Black Jack !")
             self.check_replay()
             return True
-        elif self.turn=='dealer' and self.dealer.sum_point > 16:
+        elif self.turn == 'dealer' and self.dealer.sum_point > 16:
             if self.dealer.sum_point == self.player.sum_point:
                 print('This is a TIE! Game Over!')
                 self.check_replay()
@@ -99,7 +100,7 @@ class Black_Jack():
                 return True
             else:
                 print('You Win! Dealer is busted!')
-                self.player.deposite(self.player.curr_bet*2)
+                self.player.deposite(self.player.curr_bet * 2)
                 self.check_replay()
                 return True
         return False
@@ -131,8 +132,8 @@ class Black_Jack():
         if self.player.get_balance() <= 0:
             print('Your deposit balance has been exhausted!')
         else:
-            print('Your current bankroll is: ' + self.player.get_balance())
+            print('Your current bankroll is: ' + str(self.player.get_balance()))
             print('Do you want to replay?')
-            replay = input(' Yes or No:')
+            replay = input(Fore.RED + ' Yes ' + Fore.BLACK + 'or' + Fore.BLUE + ' No:' + Style.RESET_ALL)
             if replay == 'Yes' or replay == 'yes' or replay == 'y':
                 self.init_game(reset=True)
