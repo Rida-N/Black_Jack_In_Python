@@ -9,7 +9,6 @@ class Black_Jack():
         print('Welcome to Black Jack!')
         self.player = Player(1000)
         print('Your initial bankroll is: ' + self.player.balance)
-        self.bet()
         self.dealer = Dealer()
         self.init_game()
 
@@ -21,12 +20,15 @@ class Black_Jack():
         print('Your current bet: ' + self.player.curr_bet)
 
     def init_game(self, reset=False):
+        self.dealer.check_shuffle()
+        self.bet()
         if reset:
-            self.dealer.__init__()
-        self.hit('player')
-        self.hit('player')
-        self.hit('dealer')
-        self.hit('dealer', hide=True)
+            self.dealer.reset()
+            self.player.reset()
+        self.hit('player', onetime=True)
+        self.hit('player', onetime=True)
+        self.hit('dealer', onetime=True)
+        self.hit('dealer', onetime=True, hide=True)
         self.print_cards(first=True)
         self.gambling()
 
@@ -40,7 +42,7 @@ class Black_Jack():
             if int(self.player_choice) == 1:
                 self.hit('dealer')
             else:
-                self.hit('player')
+                self.hit('player',onetime =True)
 
     def make_option(self):
         print("What's your choice ?")
@@ -53,30 +55,43 @@ class Black_Jack():
             else:
                 break
 
-    def hit(self, player, hide=False):
+    def hit(self, player, onetime=False, hide=False):
         while not self.game_over():
             self.new_card = self.dealer.deal()
             self.sum_cards(player)
             if not hide:
                 print(player + ' new card : ' + str(self.new_card))
                 print(player + ' new point : ' + str(self.dealer.sum_point if player == 'dealer' else self.player.sum_point))
+            if onetime == True:
+                break
 
-    '''check if there is a winner'''
+    '''
+    check if there is a winner
+    '''
 
     def game_over(self):
         if self.dealer.sum_point > 21:
             print('You Win! Dealer is busted! Game Over!')
+            self.check_replay()
             return True
         elif self.player.sum_point > 21:
             print('You Lost! You are busted! Game Over!')
+            self.check_replay()
             return True
-        elif self.dealer.sum_point > self.player.sum_point:
-            print('You Lost! Dealer won! Game Over!')
-            return True
-        else:
-            return False
+        elif self.dealer.sum_point > 16:
+            if self.dealer.sum_point == self.player.sum_point:
+                print('This is a TIE! Game Over!')
+                self.check_replay()
+                return True
+            elif self.dealer.sum_point > self.player.sum_point:
+                print('You Lost! Dealer won! Game Over!')
+                self.check_replay()
+                return True
+        return False
 
-    '''sum point of the player and the dealer's cards'''
+    '''
+    sum point of the player and the dealer's cards
+    '''
 
     def sum_cards(self, player):
         new_card = self.new_card
@@ -96,3 +111,9 @@ class Black_Jack():
         else:
             self.player.sum_point = sum_point
             self.player.hand_cards.append(new_card)
+
+    def check_replay(self):
+        print('Do you want to replay?')
+        replay = input(' Yes or No:')
+        if replay == 'Yes' or replay == 'yes' or replay == 'y':
+            self.init_game(reset=True)
