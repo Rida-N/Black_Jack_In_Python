@@ -18,6 +18,7 @@ class Dealer():
         return Dealer.card_decks.pop()
 
     def reset(self):
+        self.check_shuffle()
         self.hand_cards = []
         self.sum_point = 0
 

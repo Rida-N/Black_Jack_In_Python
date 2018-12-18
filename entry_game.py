@@ -8,19 +8,17 @@ class Black_Jack():
     def __init__(self):
         print('Welcome to Black Jack!')
         self.player = Player(1000)
-        print('Your initial bankroll is: ' + self.player.balance)
+        print('Your initial bankroll is: ' + self.player.get_balance())
         self.dealer = Dealer()
         self.init_game()
 
     def bet(self):
         while True:
-            self.player.curr_bet = input('Please input your first bet : ')
-            if self.player.withdraw(self.player.curr_bet):
+            if self.player.withdraw(input('Please input your first bet : ')):
                 break
         print('Your current bet: ' + self.player.curr_bet)
 
     def init_game(self, reset=False):
-        self.dealer.check_shuffle()
         self.bet()
         if reset:
             self.dealer.reset()
@@ -42,7 +40,7 @@ class Black_Jack():
             if int(self.player_choice) == 1:
                 self.hit('dealer')
             else:
-                self.hit('player',onetime =True)
+                self.hit('player', onetime=True)
 
     def make_option(self):
         print("What's your choice ?")
@@ -113,7 +111,10 @@ class Black_Jack():
             self.player.hand_cards.append(new_card)
 
     def check_replay(self):
-        print('Do you want to replay?')
-        replay = input(' Yes or No:')
-        if replay == 'Yes' or replay == 'yes' or replay == 'y':
-            self.init_game(reset=True)
+        if self.player.get_balance() <= 0:
+            print('Your deposit balance has been exhausted!')
+        else:
+            print('Do you want to replay?')
+            replay = input(' Yes or No:')
+            if replay == 'Yes' or replay == 'yes' or replay == 'y':
+                self.init_game(reset=True)
