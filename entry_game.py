@@ -10,6 +10,7 @@ class Black_Jack():
         self.player = Player(1000)
         print('Your initial bankroll is: ' + self.player.get_balance())
         self.dealer = Dealer()
+        self.turn = 'player'
         self.init_game()
 
     def bet(self):
@@ -23,11 +24,13 @@ class Black_Jack():
         if reset:
             self.dealer.reset()
             self.player.reset()
-        self.hit('player', onetime=True)
-        self.hit('player', onetime=True)
-        self.hit('dealer', onetime=True)
-        self.hit('dealer', onetime=True, hide=True)
+        self.hit(self.turn, onetime=True)
+        self.hit(self.turn, onetime=True)
+        self.turn='dealer'
+        self.hit(self.turn, onetime=True)
+        self.hit(self.turn, onetime=True, hide=True)
         self.print_cards(first=True)
+        self.turn='player'
         self.gambling()
 
     def print_cards(self, first=False):
@@ -69,20 +72,34 @@ class Black_Jack():
 
     def game_over(self):
         if self.dealer.sum_point > 21:
-            print('You Win! Dealer is busted! Game Over!')
+            print('You Win! Dealer is busted!')
+            self.player.deposite(self.player.curr_bet*2)
             self.check_replay()
             return True
         elif self.player.sum_point > 21:
             print('You Lost! You are busted! Game Over!')
             self.check_replay()
             return True
-        elif self.dealer.sum_point > 16:
+        elif self.player.sum_point == 21:
+            if self.dealer.sum_point == 21:
+                print('This is a TIE! Game Over!')
+            else:
+                self.player.deposite(self.player.curr_bet+self.player.curr_bet/2*3)
+                print("You Win! It's a Black Jack !")
+            self.check_replay()
+            return True
+        elif self.turn=='dealer' and self.dealer.sum_point > 16:
             if self.dealer.sum_point == self.player.sum_point:
                 print('This is a TIE! Game Over!')
                 self.check_replay()
                 return True
             elif self.dealer.sum_point > self.player.sum_point:
                 print('You Lost! Dealer won! Game Over!')
+                self.check_replay()
+                return True
+            else:
+                print('You Win! Dealer is busted!')
+                self.player.deposite(self.player.curr_bet*2)
                 self.check_replay()
                 return True
         return False
@@ -114,6 +131,7 @@ class Black_Jack():
         if self.player.get_balance() <= 0:
             print('Your deposit balance has been exhausted!')
         else:
+            print('Your current bankroll is: ' + self.player.get_balance())
             print('Do you want to replay?')
             replay = input(' Yes or No:')
             if replay == 'Yes' or replay == 'yes' or replay == 'y':

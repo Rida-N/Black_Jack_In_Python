@@ -26,7 +26,7 @@ class Player():
             if self.__balance < 0:
                 print('Your balance is insufficient，only ' + str(self.__balance) + ' left.')
                 return False
-            self.curr_bet = money
+            self.curr_bet = int(money)
             print('Your current total balance: ' + str(self.__balance))
             return True
         else:
