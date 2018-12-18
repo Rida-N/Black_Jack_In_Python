@@ -4,7 +4,7 @@ from service import common_util
 class Player():
 
     def __init__(self, balance=0):
-        self.__balance = 0
+        self.__balance = balance
         self.curr_bet = 0
         self.hand_cards = []
         self.sum_point = 0
