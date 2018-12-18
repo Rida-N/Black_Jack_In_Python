@@ -10,7 +10,6 @@ class Black_Jack():
         self.player = Player(1000)
         print('Your initial bankroll is: ' + str(self.player.get_balance()))
         self.dealer = Dealer()
-        self.turn = 'player'
         self.init_game()
 
     def bet(self):
@@ -24,19 +23,20 @@ class Black_Jack():
         if reset:
             self.dealer.reset()
             self.player.reset()
-        self.hit(self.turn, onetime=True)
-        self.hit(self.turn, onetime=True)
-        self.turn = 'dealer'
-        self.hit(self.turn, onetime=True)
-        self.hit(self.turn, onetime=True, hide=True)
-        self.print_cards(first=True)
-        self.turn = 'player'
+        self.hit('player', init=True)
+        self.hit('player', init=True)
+        self.hit('dealer', init=True)
+        self.hit('dealer', init=True)
+        self.print_status(first=True)
         self.gambling()
 
-    def print_cards(self, first=False):
-        print('Your card : ' + Fore.RED + str(self.player.hand_cards) + Style.RESET_ALL)
-        print("Dealer's card : " + Fore.BLUE + str((['*'] + self.dealer.hand_cards[1:]) if first else self.dealer.hand_cards))
-        print(Style.RESET_ALL)
+    def print_status(self, first=False):
+        print(Fore.GREEN + '----------------------' + Style.RESET_ALL)
+        print('Your card : ' + Fore.RED + str(self.player.hand_cards) + Style.RESET_ALL
+              + ' Your points: ' + Fore.RED + str(self.player.sum_point) + Style.RESET_ALL)
+        print("Dealer's card : " + Fore.BLUE + str((['*'] + self.dealer.hand_cards[1:]) if first else self.dealer.hand_cards) + (
+              (Style.RESET_ALL + ' Dealer points: ' + Fore.BLUE + str(self.dealer.sum_point)) if not first else ''))
+        print(Fore.GREEN + '----------------------' + Style.RESET_ALL)
 
     def gambling(self):
         while not self.game_over():
@@ -44,7 +44,7 @@ class Black_Jack():
             if int(self.player_choice) == 1:
                 self.hit('dealer')
             else:
-                self.hit('player', onetime=True)
+                self.hit('player')
 
     def make_option(self):
         print(Fore.GREEN + "What's your choice ?")
@@ -57,14 +57,15 @@ class Black_Jack():
             else:
                 break
 
-    def hit(self, player, onetime=False, hide=False):
+    def hit(self, player, init=False):
+        self.turn = player
         while not self.game_over():
             self.new_card = self.dealer.deal()
             self.sum_cards(player)
-            if not hide:
-                print(player + ' new card : ' + str(self.new_card))
-                print(player + ' new point : ' + str(self.dealer.sum_point if player == 'dealer' else self.player.sum_point))
-            if onetime == True:
+            print(player + ' Hitted once!')
+            if not init:
+                self.print_status()
+            if player == 'player':
                 break
 
     '''
