@@ -22,13 +22,14 @@ class Player():
 
     def withdraw(self, money):
         if common_util.check_int(money) and int(money) > 0:
-            self.__balance = self.__balance - int(money)
-            if self.__balance < 0:
+            if self.__balance < int(money):
                 print('Your bankroll is insufficient，only ' + str(self.__balance) + ' left.')
                 return False
-            self.curr_bet = int(money)
-            print('Your current total bankroll: ' + str(self.__balance))
-            return True
+            else:
+                self.__balance = self.__balance - int(money)
+                self.curr_bet = int(money)
+                print('Your current total bankroll: ' + str(self.__balance))
+                return True
         else:
             print('Incorrect money number!')
             return False
