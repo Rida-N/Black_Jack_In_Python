@@ -43,6 +43,7 @@ class Black_Jack():
         while not self.is_game_over():
             self.make_option()
             if int(self.player_choice) == 1:
+                self.turn = 'dealer'
                 while not self.is_game_over():
                     self.hit('dealer')
             else:
@@ -66,8 +67,7 @@ class Black_Jack():
         else:
             self.dealer.hand_cards.append(self.dealer.deal())
         cards = list(self.dealer.hand_cards if player == 'dealer' else self.player.hand_cards)
-        ['Ace']*(cards.count('Ace') )+list(filter(lambda a:a !='Ace',cards))
-        sum_point = self.sum_cards(cards)
+        sum_point = self.sum_cards(['Ace'] * (cards.count('Ace')) + list(filter(lambda a: a != 'Ace', cards)))
         if player == 'dealer':
             self.dealer.sum_point = sum_point
         else:
@@ -93,16 +93,16 @@ class Black_Jack():
                 self.game_over = True
             elif self.player.sum_point == 21 or self.dealer.sum_point == 21:
                 if self.player.sum_point == self.dealer.sum_point:
-                    print(Fore.LIGHTCYAN_EX + 'This is a TIE! You both got a ' + 'natural' if self.game_over ==
-                          None else '' + 'Black Jack! Game Over!' + Style.RESET_ALL)
+                    print(Fore.LIGHTCYAN_EX + 'This is a TIE! You both got a '
+                          + ('natural ' if self.game_over == None else '') + 'Black Jack! Game Over!' + Style.RESET_ALL)
                     self.player.deposite(self.player.curr_bet)
                 else:
                     if self.player.sum_point == 21:
-                        print(Fore.GREEN + "You Win! It's a " + 'natural' if self.game_over == None else '' + 'Black Jack !' + Style.RESET_ALL)
+                        print(Fore.GREEN + "You Win! It's a " + ('natural ' if self.game_over == None else '') + 'Black Jack !' + Style.RESET_ALL)
                         self.player.deposite(self.player.curr_bet + self.player.curr_bet / 2 * 3)
                     else:
-                        print(Fore.RED + "You Lost! Dealer got a " + 'natural' if self.game_over ==
-                              None else '' + 'Black Jack !' + Style.RESET_ALL)
+                        print(Fore.RED + "You Lost! Dealer got a " + ('natural ' if self.game_over
+                                                                      == None else '') + 'Black Jack !' + Style.RESET_ALL)
                 self.game_over = True
             elif self.turn == 'dealer' and self.dealer.sum_point > 16:
                 if self.dealer.sum_point == self.player.sum_point:
@@ -112,12 +112,12 @@ class Black_Jack():
                 elif self.dealer.sum_point > self.player.sum_point:
                     print(Fore.RED + 'You Lost! Dealer won! Game Over!' + Style.RESET_ALL)
                     self.game_over = True
-                else:
-                    self.game_over = False
-            if self.game_over:
-                print('The final score is as below :')
-                self.print_status()
-                self.check_replay()
+            else:
+                self.game_over = False
+        if self.game_over:
+            print('The final score is as below :')
+            self.print_status()
+            self.check_replay()
         return self.game_over
 
     '''
