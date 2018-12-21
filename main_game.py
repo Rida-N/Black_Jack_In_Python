@@ -117,7 +117,7 @@ class Black_Jack():
         if self.game_over:
             print('The final score is as below :')
             self.print_status()
-            self.check_replay()
+            self.game_over = not self.check_replay()
         return self.game_over
 
     '''
@@ -144,9 +144,13 @@ class Black_Jack():
     def check_replay(self):
         if self.player.get_balance() <= 0:
             print('Your deposit bankroll has been exhausted!')
+            return False
         else:
             print('Your current total bankroll is: ' + Fore.BLUE + str(self.player.get_balance()) + Style.RESET_ALL)
             print('Do you want to replay?')
             replay = input(Fore.RED + ' Yes ' + Fore.BLACK + 'or' + Fore.BLUE + ' No:' + Style.RESET_ALL)
             if replay == 'Yes' or replay == 'yes' or replay == 'y':
                 self.init_game(reset=True)
+                return True
+            else:
+                return False
