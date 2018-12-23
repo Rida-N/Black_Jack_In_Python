@@ -21,6 +21,9 @@ Any face card (J,Q,K) is worth 10, and any other card is worth is nominal value.
 
 • Winning will reward you with double your bet - for example, $2000 for a bet of $1000, to $1000 of pure benefit. A Blackjack has a slightly higher payoff of 3 to 2, such as $2500 for a bet of $1000, or $1500 of a pure benefit.
 
+
+The above functions finished, below funcs may be added into a future version...
+---
 • Unlike the dealer, you can DOUBLE your bet once cards are dealt (but before you Hit or Stand). You will have to take exactly one more card, and then immediately Stand. If you get two cards of the same value (such as 7 and 7, A and A, or even 10 and K), you can play that hand, or choose to SPLIT.
 
 When you Split, you make two new hands, each with the bet equal to your initial bet, composed of one of your duplicate cards and one new card each. Once Split, each new hand will be played like usual, against the same hand of the dealer, with separate win or loss. You can even Split again if possible, up to 3 times per deal. Both Double and Split again if possible, up to 3 times per deal. Both Double and Split can only be done if you have enough money in the bank to increase your bet.
